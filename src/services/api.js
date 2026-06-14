@@ -83,4 +83,12 @@ export const settingsAPI = {
   changePassword: (data) => api.put("/settings/password", data),
 };
 
+export const adminAPI = {
+  getStats: () => api.get("/admin/stats"),
+  getUsers: (params) => api.get("/admin/users", { params }),
+  getUser: (id) => api.get(`/admin/users/${id}`),
+  updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
+  deleteUser: (id) => api.delete(`/admin/users/${id}`),
+};
+
 export default api;

@@ -14,6 +14,10 @@ import BodyPage from "./pages/body/BodyPage";
 import GoalsPage from "./pages/goals/GoalsPage";
 import ProgressPage from "./pages/progress/ProgressPage";
 import SettingsPage from "./pages/settings/SettingsPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminUserDetail from "./pages/admin/AdminUserDetail";
+import AdminLayout from "./components/layout/AdminLayout";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -36,6 +40,20 @@ function ProtectedRoute({ children }) {
       </main>
     </div>
   );
+}
+
+function AdminRoute({ children }) {
+  const { user, loading, isAdmin } = useAuth();
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <span className="loading loading-dots loading-lg text-primary"></span>
+      </div>
+    );
+  }
+  if (!user) return <Navigate to="/login" />;
+  if (!isAdmin) return <Navigate to="/dashboard" />;
+  return <AdminLayout>{children}</AdminLayout>;
 }
 
 function PublicRoute({ children }) {
@@ -69,6 +87,11 @@ export default function App() {
           <Route path="/goals" element={<ProtectedRoute><GoalsPage /></ProtectedRoute>} />
           <Route path="/progress" element={<ProtectedRoute><ProgressPage /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+          <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetail /></AdminRoute>} />
+
           <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>

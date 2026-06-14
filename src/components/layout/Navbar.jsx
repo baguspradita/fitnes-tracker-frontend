@@ -11,7 +11,8 @@ import {
   FiSettings,
   FiLogOut,
   FiMenu,
-  FiX
+  FiX,
+  FiShield
 } from "react-icons/fi";
 import { useState, useRef, useEffect } from "react";
 
@@ -26,7 +27,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,11 +77,10 @@ export default function Navbar() {
             <li key={link.to}>
               <Link
                 to={link.to}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${
-                  isActive(link.to)
-                    ? "bg-primary/10 text-primary"
-                    : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors no-underline ${isActive(link.to)
+                  ? "bg-primary/10 text-primary"
+                  : "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+                  }`}
               >
                 <link.icon size={16} />
                 {link.label}
@@ -123,6 +123,16 @@ export default function Navbar() {
                   <FiSettings size={16} />
                   Settings
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setAvatarOpen(false)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm hover:bg-error/10 transition-colors no-underline text-error"
+                  >
+                    <FiShield size={16} />
+                    Admin Panel
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-error hover:bg-error/10 transition-colors"
